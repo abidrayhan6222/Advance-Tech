@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="bn">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>শুধু মাত্র যারা টাকা পাঠাবেন তারা ফর্মটি পূরণ করবেন</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: #ffba52;
+    }
+    .container {
+      margin-top: 20px;
+    }
+    input {
+      height: 50px;
+      color: #000000;
+    }
+    button {
+      height: 60px;
+      width: 140px;
+    }
+    h1, h2, p, span {
+      color: #000000;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    h2 {
+      margin-top: 40px;
+      margin-bottom: 20px;
+    }
+    p {
+      text-align: left;
+    }
+    .message, .loading, .duplicate-warning {
+      display: none;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+    .message {
+      color: green;
+    }
+    .loading {
+      color: blue;
+    }
+    .duplicate-warning {
+      color: red;
+    }
+    .logo-board {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      gap: 30px;
+      margin-bottom: 20px;
+    }
+    .logo-board div {
+      text-align: center;
+    }
+    .logo-board img {
+      height: 40px;
+      width: 40px;
+      margin-bottom: 5px;
+    }
+    .form-container {
+      border: 2px solid #ccc;
+      padding: 20px;
+      border-radius: 10px;
+      background: #9cffa9;
+      color: #000000;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    .mb-3 p {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .modal-content {
+      background-color: #ffba52; /* Light orange background */
+      color: #000000;
+      border: 2px solid rgb(128, 128, 128);
+      text-align: center;
+      animation: winningAnimation 2s ease-in-out;
+    }
+    @keyframes winningAnimation {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.1);
+      }
+    }
+    .box-container {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      gap: 20px;
+    }
+    .box {
+      border: 1px solid #ccc;
+      padding: 15px;
+      border-radius: 10px;
+      background: #9cffa9;
+      text-align: center;
+      width: 200px;
+    }
+    .box p {
+      margin: 0;
+      font-weight: bold;
+    }
+    .box .number {
+      display: block;
+      margin-bottom: 10px;
+    }
+    .copy-button {
+      height: 30px;
+      width: 100px;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+    .btn-submit {
+      background-color: #28a745;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container text-center">
+    <h1><b>সেন্ড মানি করুন</b></h1>
+    <div class="box-container">
+      <div class="box">
+        <img src="https://raw.githubusercontent.com/abidrayhan6222/Advance-Tech/main/bkash%20icone.jpg" alt="bKash Logo">
+        <h6>Bkash</h6>
+        <h6>Send Money</h6>
+        <span class="number"><b>01707622203</b></span>
+        <button class="copy-button" onclick="copyToClipboard('01707-622203')">Copy</button>
+      </div>
+      <div class="box">
+        <img src="https://raw.githubusercontent.com/abidrayhan6222/Advance-Tech/main/nagad%20icon.jpg" alt="Nagad Logo">
+        <h6>Nagad</h6>
+        <h6>Send Money</h6>
+        <span class="number"><b>01707622203</b></span>
+        <button class="copy-button" onclick="copyToClipboard('01707-622203')">Copy</button>
+      </div>
+      <div class="box">
+        <img src="https://raw.githubusercontent.com/abidrayhan6222/Advance-Tech/main/rocket%20icone.jpg" alt="Rocket Logo">
+        <h6>Rocket</h6>
+        <h6>Send Money</h6>
+        <span class="number"><b>017076222035</b></span>
+        <button class="copy-button" onclick="copyToClipboard('01707-6222035')">Copy</button>
+      </div>
+    </div>
+    <h2>শুধু মাত্র যারা টাকা পাঠাবেন তারা ফর্মটি পূরণ করবেন</h2>
+    <br>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#formModal">
+      ফর্মটি পূরণ করুন
+    </button>
+    <div id="loading" class="loading">আপনার তথ্য জমা হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন...</div>
+    <div id="message" class="message">অভিনন্দন আপনার তথ্য জমা নেওয়া হয়েছে, আপনার সাথে SMS এ যোগাযোগ করা হবে</div>
+    <div id="duplicate-warning" class="duplicate-warning">আপনি একই তথ্য জমা দিয়েছেন, দয়া করে আবার চেষ্টা করুন</div>
+  </div>
+  <!-- Form Modal -->
+  <div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="formModalLabel">শুধু মাত্র যারা টাকা পাঠাবেন তারা ফর্মটি পূরণ করবেন</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="form-container">
+            <form name="submit-to-google-sheet">
+              <div class="mb-3">
+                <p>Name</p>
+                <input name="Name" type="text" class="form-control" placeholder="Enter Your Full Name" required>
+              </div>
+              <div class="mb-3">
+                <p>WhatsApp Number</p>
+                <input name="WhatsApp Number" type="text" class="form-control" placeholder="Enter Your WhatsApp Number" required>
+              </div>
+              <div class="mb-3">
+                <p>Email</p>
+                <input name="Email" type="email" class="form-control" placeholder="Enter Your Email" required>
+              </div>
+              <div class="mb-3">
+                <p>Transaction ID</p>
+                <input name="Transaction ID" type="text" class="form-control" placeholder="Enter Your Transaction ID" required>
+              </div>
+              <div class="mb-3">
+                <p>Send Money Number</p>
+                <input name="Send Money Number" type="text" class="form-control" placeholder="Enter Send Money Number" required>
+              </div>
+              <div>
+                <button type="submit" class="btn btn-submit">Submit</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Success Modal -->
+  <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body">
+          <img src="https://raw.githubusercontent.com/abidrayhan6222/product/main/Add%20a%20heading.gif" alt="Success Image" style="width: 100%; height: 100%;">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbwGzIlt3YBiqUwKHMD65oFZMpgiCzZb7tqeRxxa2J_dh-yBsiz_ym7IU86oFFTyaVI3/exec'; // Replace with your Google Apps Script URL
+    const form = document.forms['submit-to-google-sheet'];
+    const submittedData = new Set();
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const transactionID = formData.get('Transaction ID');
+      if (submittedData.has(transactionID)) {
+        document.getElementById('duplicate-warning').style.display = 'block';
+        return;
+      }
+      document.getElementById('loading').style.display = 'block';
+      document.getElementById('message').style.display = 'none';
+      document.getElementById('duplicate-warning').style.display = 'none';
+      fetch(scriptURL, { method: 'POST', body: formData })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log('Success:', data);
+          document.getElementById('loading').style.display = 'none';
+          document.getElementById('message').style.display = 'block';
+          submittedData.add(transactionID);
+          form.reset();
+          const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+          successModal.show();
+        })
+        .catch(error => {
+          console.error('Error:', error.message);
+          document.getElementById('loading').style.display = 'none';
+          document.getElementById('message').innerText = 'There was a problem with your submission. Please try again.';
+          document.getElementById('message').style.color = 'red';
+          document.getElementById('message').style.display = 'block';
+        });
+    });
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Number copied to clipboard');
+      }).catch(err => {
+        console.error('Failed to copy text: ', err);
+      });
+    }
+  </script>
+</body>
+
+</html>
